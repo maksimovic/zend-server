@@ -1,14 +1,18 @@
 {
-    "name": "zf1s/zend-server",
+    "name": "maksimovic/zend-server",
     "description": "Zend Framework 1 Server package",
     "keywords": ["framework", "zf1", "zend", "server"],
     "homepage": "http://framework.zend.com/",
     "license": "BSD-3-Clause",
     "require": {
-        "php": ">=5.3.3",
+        "php": ">=8.1",
         "ext-spl": "*",
         "ext-reflection": "*",
-        "zf1s/zend-exception": "^1.15.6"
+        "maksimovic/zend-exception": "^2.0.1"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^10.5",
+        "phpstan/phpstan": "^2.1"
     },
     "autoload": {
         "psr-0": {
@@ -16,11 +20,17 @@
         }
     },
     "replace": {
-        "zf1/zend-server": "^1.12"
+        "zf1/zend-server": "^1.12",
+        "zf1s/zend-server": "^1.12"
+    },
+    "scripts": {
+        "test": "phpunit",
+        "test:coverage": "phpunit --coverage-text",
+        "phpstan": "phpstan analyse --memory-limit=256M"
     },
     "extra": {
         "branch-alias": {
-            "dev-master": "1.x-dev"
+            "dev-master": "2.x-dev"
         }
     }
 }

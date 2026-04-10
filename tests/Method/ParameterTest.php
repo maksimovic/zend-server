@@ -1,0 +1,137 @@
+<?php
+
+use PHPUnit\Framework\TestCase;
+
+class Zend_Server_Method_ParameterTest extends TestCase
+{
+    protected $parameter;
+
+    protected function setUp(): void
+    {
+        $this->parameter = new Zend_Server_Method_Parameter();
+    }
+
+    protected function tearDown(): void
+    {
+    }
+
+    public function testDefaultValueShouldBeNullByDefault(): void
+    {
+        $this->assertNull($this->parameter->getDefaultValue());
+    }
+
+    public function testDefaultValueShouldBeMutable(): void
+    {
+        $this->assertNull($this->parameter->getDefaultValue());
+        $this->parameter->setDefaultValue('foo');
+        $this->assertEquals('foo', $this->parameter->getDefaultValue());
+    }
+
+    public function testDescriptionShouldBeEmptyStringByDefault(): void
+    {
+        $this->assertSame('', $this->parameter->getDescription());
+    }
+
+    public function testDescriptionShouldBeMutable(): void
+    {
+        $message = 'This is a description';
+        $this->assertSame('', $this->parameter->getDescription());
+        $this->parameter->setDescription($message);
+        $this->assertEquals($message, $this->parameter->getDescription());
+    }
+
+    public function testSettingDescriptionShouldCastToString(): void
+    {
+        $message = 123456;
+        $this->parameter->setDescription($message);
+        $test = $this->parameter->getDescription();
+        $this->assertNotSame($message, $test);
+        $this->assertEquals($message, $test);
+    }
+
+    public function testNameShouldBeNullByDefault(): void
+    {
+        $this->assertNull($this->parameter->getName());
+    }
+
+    public function testNameShouldBeMutable(): void
+    {
+        $name = 'foo';
+        $this->assertNull($this->parameter->getName());
+        $this->parameter->setName($name);
+        $this->assertEquals($name, $this->parameter->getName());
+    }
+
+    public function testSettingNameShouldCastToString(): void
+    {
+        $name = 123456;
+        $this->parameter->setName($name);
+        $test = $this->parameter->getName();
+        $this->assertNotSame($name, $test);
+        $this->assertEquals($name, $test);
+    }
+
+    public function testParameterShouldBeRequiredByDefault(): void
+    {
+        $this->assertFalse($this->parameter->isOptional());
+    }
+
+    public function testParameterShouldAllowBeingOptional(): void
+    {
+        $this->assertFalse($this->parameter->isOptional());
+        $this->parameter->setOptional(true);
+        $this->assertTrue($this->parameter->isOptional());
+    }
+
+    public function testTypeShouldBeMixedByDefault(): void
+    {
+        $this->assertEquals('mixed', $this->parameter->getType());
+    }
+
+    public function testTypeShouldBeMutable(): void
+    {
+        $type = 'string';
+        $this->assertEquals('mixed', $this->parameter->getType());
+        $this->parameter->setType($type);
+        $this->assertEquals($type, $this->parameter->getType());
+    }
+
+    public function testSettingTypeShouldCastToString(): void
+    {
+        $type = 123456;
+        $this->parameter->setType($type);
+        $test = $this->parameter->getType();
+        $this->assertNotSame($type, $test);
+        $this->assertEquals($type, $test);
+    }
+
+    public function testParameterShouldSerializeToArray(): void
+    {
+        $type         = 'string';
+        $name         = 'foo';
+        $optional     = true;
+        $defaultValue = 'bar';
+        $description  = 'Foo bar!';
+        $parameter    = compact('type', 'name', 'optional', 'defaultValue', 'description');
+        $this->parameter->setType($type)
+                        ->setName($name)
+                        ->setOptional($optional)
+                        ->setDefaultValue($defaultValue)
+                        ->setDescription($description);
+        $test = $this->parameter->toArray();
+        $this->assertEquals($parameter, $test);
+    }
+
+    public function testConstructorShouldSetObjectStateFromPassedOptions(): void
+    {
+        $type         = 'string';
+        $name         = 'foo';
+        $optional     = true;
+        $defaultValue = 'bar';
+        $description  = 'Foo bar!';
+        $options      = compact('type', 'name', 'optional', 'defaultValue', 'description');
+        $parameter    = new Zend_Server_Method_Parameter($options);
+        $test         = $parameter->toArray();
+        $this->assertEquals($options, $test);
+    }
+}
